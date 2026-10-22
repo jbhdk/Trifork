@@ -23,7 +23,7 @@ public class Worker : BackgroundService
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             }
-        
+
             _publisher.PublishMessage(new TheMessage(DateTime.Now, 1));
 
             int waitSecs = rnd.Next(30, 60);
