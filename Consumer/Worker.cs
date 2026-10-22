@@ -1,23 +1,44 @@
+using System.Text.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using Shared;
+
 namespace Consumer;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private readonly IConnection _connection;
+    private readonly List<IMessagHandler> _chain;
 
-    public Worker(ILogger<Worker> logger)
+    public Worker(
+        ILogger<Worker> logger,
+        IConnection connection,
+        List<IMessagHandler> chain)
     {
         _logger = logger;
+        _connection = connection;
+        _chain = chain;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        IChannel channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        AsyncEventingBasicConsumer consumer = new(channel);
+
+        consumer.ReceivedAsync += async (x, y) =>
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            TheMessage message = JsonSerializer.Deserialize<TheMessage>(y.Body.Span)!;
+
+            IMessagHandler? handler = _chain.FirstOrDefault(handler => handler.CanHandleMessage(message));
+            if (handler != null)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                handler.HandleMessage(message);
             }
-            await Task.Delay(1000, stoppingToken);
-        }
+            else
+            {
+                _logger.LogWarning("No handler for message {Message}", message);
+            }
+        };
     }
 }

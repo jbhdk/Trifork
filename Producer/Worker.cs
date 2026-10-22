@@ -24,7 +24,7 @@ public class Worker : BackgroundService
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             }
 
-            _publisher.PublishMessage(new TheMessage(DateTime.Now, 1));
+            await _publisher.PublishMessageAsync(new TheMessage(DateTime.Now, 1));
 
             int waitSecs = rnd.Next(30, 60);
             await Task.Delay(waitSecs * 1000, stoppingToken);

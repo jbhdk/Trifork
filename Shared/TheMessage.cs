@@ -1,3 +1,9 @@
 ﻿namespace Shared;
 
-public sealed record TheMessage(DateTime Timestamp, int InitialCount);
+public sealed record TheMessage(DateTime Timestamp, int Count)
+{
+    public override string ToString()
+    {
+        return $"Timestamp: {Timestamp}, Count: {Count}";
+    }
+}
