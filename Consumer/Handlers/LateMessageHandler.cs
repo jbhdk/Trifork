@@ -12,8 +12,10 @@ public class LateMessageHandler(ILogger<LateMessageHandler> logger, TimeProvider
         return message.Timestamp + new TimeSpan(0, 1, 0) >= _timeProvider.GetLocalNow();
     }
 
-    public void HandleMessage(TheMessage message)
+    public Task HandleMessageAsync(TheMessage message)
     {
         _logger.LogDebug("Late message: {Message}", message);
+
+        return Task.CompletedTask;
     }
 }

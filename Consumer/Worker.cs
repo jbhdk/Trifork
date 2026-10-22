@@ -33,7 +33,7 @@ public class Worker : BackgroundService
             IMessagHandler? handler = _chain.FirstOrDefault(handler => handler.CanHandleMessage(message));
             if (handler != null)
             {
-                handler.HandleMessage(message);
+                await handler.HandleMessageAsync(message);
             }
             else
             {

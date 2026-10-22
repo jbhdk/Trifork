@@ -3,7 +3,7 @@ using RabbitMQ.Client;
 
 namespace Shared;
 
-public class RabbitPublisher(IConnection connection) : IAsyncDisposable
+public class RabbitPublisher(IConnection connection) : IAsyncDisposable, IRabbitPublisher
 {
     private readonly SemaphoreSlim _lock = new(1, 1);
     private IChannel? _channel;

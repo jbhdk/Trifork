@@ -4,6 +4,6 @@ namespace Consumer;
 
 public interface IMessagHandler
 {
-    void HandleMessage(TheMessage message);
+    Task HandleMessageAsync(TheMessage message);
     bool CanHandleMessage(TheMessage message);
 }
