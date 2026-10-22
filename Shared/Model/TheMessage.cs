@@ -1,4 +1,4 @@
-﻿namespace Shared;
+﻿namespace Shared.Model;
 
 public sealed record TheMessage(DateTime Timestamp, int Count)
 {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Shared;
 using Microsoft.Extensions.Time.Testing;
+using Shared.Model;
 
 namespace ConsumerTests;
 

@@ -4,9 +4,12 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>30ac63b5-b833-40ae-9dc0-88adc181c69f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DapperExtensions" Version="1.7.0" />
+    <PackageReference Include="Npgsql" Version="10.0.3" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.2" />
   </ItemGroup>
 

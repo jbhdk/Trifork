@@ -1,5 +1,6 @@
 using System.Text.Json;
 using RabbitMQ.Client;
+using Shared.Model;
 
 namespace Shared.MessageQueue;
 

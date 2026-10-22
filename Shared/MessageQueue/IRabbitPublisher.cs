@@ -1,3 +1,5 @@
+using Shared.Model;
+
 namespace Shared.MessageQueue;
 
 public interface IRabbitPublisher

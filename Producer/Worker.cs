@@ -1,5 +1,6 @@
 using Shared;
 using Shared.MessageQueue;
+using Shared.Model;
 
 namespace Producer;
 

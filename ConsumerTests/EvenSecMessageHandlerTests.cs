@@ -3,6 +3,7 @@ using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shared;
 using Shared.MessageQueue;
+using Shared.Model;
 
 namespace ConsumerTests;
 
