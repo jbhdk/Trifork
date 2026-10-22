@@ -1,4 +1,4 @@
-namespace Shared.RabbitMQ;
+namespace Shared.MessageQueue;
 
 public interface IRabbitPublisher
 {

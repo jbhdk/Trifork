@@ -1,5 +1,5 @@
 using Shared;
-using Shared.RabbitMQ;
+using Shared.MessageQueue;
 
 namespace Producer;
 
