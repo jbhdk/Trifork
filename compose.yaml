@@ -1,0 +1,37 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    hostname: rabbitmq            # RabbitMQ gemmer data pr. node-navn; fast hostname = data overlever genstart
+    ports:
+      - "5672:5672"               # AMQP (apps)
+      - "15672:15672"             # Management UI (browser)
+    environment:
+      RABBITMQ_DEFAULT_USER: backtest
+      RABBITMQ_DEFAULT_PASS: backtest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: backtest
+      POSTGRES_PASSWORD: backtest
+      POSTGRES_DB: backtesting
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U backtest -d backtesting"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  rabbitmq-data:
+  postgres-data:

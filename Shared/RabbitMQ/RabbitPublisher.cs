@@ -1,7 +1,7 @@
 using System.Text.Json;
 using RabbitMQ.Client;
 
-namespace Shared;
+namespace Shared.RabbitMQ;
 
 public class RabbitPublisher(IConnection connection) : IAsyncDisposable, IRabbitPublisher
 {

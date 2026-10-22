@@ -2,6 +2,7 @@ using Consumer.Handlers;
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shared;
+using Shared.RabbitMQ;
 
 namespace ConsumerTests;
 
