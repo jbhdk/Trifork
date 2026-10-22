@@ -9,7 +9,7 @@ public class LateMessageHandler(ILogger<LateMessageHandler> logger, TimeProvider
 
     public bool CanHandleMessage(TheMessage message)
     {
-        return message.Timestamp + new TimeSpan(0, 1, 0) > _timeProvider.GetLocalNow();
+        return message.Timestamp + new TimeSpan(0, 1, 0) >= _timeProvider.GetLocalNow();
     }
 
     public void HandleMessage(TheMessage message)
