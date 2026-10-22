@@ -1,15 +1,20 @@
 using System.Data;
-using DapperExtensions;
+using Dapper;
 using Shared.Model;
 
 namespace Shared.Repository;
 
 public class MessageRepository(IDbConnectionFactory connectionFactory) : IMessageRepository
 {
+    private const string InsertSql = """
+        INSERT INTO "TheMessage" ("Timestamp", "Count")
+        VALUES (@Timestamp, @Count)
+        """;
+
     public void Insert(TheMessage message)
     {
         using IDbConnection connection = connectionFactory.OpenConnection();
 
-        connection.Insert(message);
+        connection.Execute(InsertSql, message);
     }
 }
