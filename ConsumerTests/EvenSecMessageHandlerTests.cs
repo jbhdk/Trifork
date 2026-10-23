@@ -1,9 +1,8 @@
 using Consumer.Handlers;
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
-using Shared;
-using Shared.MessageQueue;
 using Shared.Model;
+using Shared.Repository;
 
 namespace ConsumerTests;
 
@@ -14,8 +13,9 @@ public class EvenSecMessageHandlerTests
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 1);
         TheMessage message = new(messageTimestamp, 1);
+        IMessageRepository repository = A.Fake<IMessageRepository>();
 
-        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>());
+        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
 
         bool canHandle = handler.CanHandleMessage(message);
 
@@ -27,9 +27,9 @@ public class EvenSecMessageHandlerTests
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
         TheMessage message = new(messageTimestamp, 1);
+        IMessageRepository repository = A.Fake<IMessageRepository>();
 
-        IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
-        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>());
+        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
 
         bool canHandle = handler.CanHandleMessage(message);
 
@@ -41,9 +41,11 @@ public class EvenSecMessageHandlerTests
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
         TheMessage message = new(messageTimestamp, 1);
+        IMessageRepository repository = A.Fake<IMessageRepository>();
 
-        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>());
+        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
 
         await handler.HandleMessageAsync(message);
+        A.CallTo(() => repository.Insert(message)).MustHaveHappenedOnceExactly();
     }
 }

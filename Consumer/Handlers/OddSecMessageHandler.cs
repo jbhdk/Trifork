@@ -1,4 +1,3 @@
-using Shared;
 using Shared.MessageQueue;
 using Shared.Model;
 
@@ -18,6 +17,8 @@ public class OddSecMessageHandler(ILogger<OddSecMessageHandler> logger, IRabbitP
     {
         // return to queue and +1
         TheMessage newMessage = new(message.Timestamp, message.Count + 1);
+
+        _logger.LogInformation("Returning message to queue: '{Message}'", newMessage);
         await _publisher.PublishMessageAsync(newMessage);
     }
 }

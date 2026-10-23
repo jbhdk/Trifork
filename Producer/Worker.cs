@@ -1,4 +1,3 @@
-using Shared;
 using Shared.MessageQueue;
 using Shared.Model;
 
@@ -7,9 +6,9 @@ namespace Producer;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly RabbitPublisher _publisher;
+    private readonly IRabbitPublisher _publisher;
 
-    public Worker(ILogger<Worker> logger, RabbitPublisher publisher)
+    public Worker(ILogger<Worker> logger, IRabbitPublisher publisher)
     {
         _logger = logger;
         _publisher = publisher;
@@ -21,12 +20,10 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
+            TheMessage message = new(DateTime.Now, 1);
+            _logger.LogInformation("Pushing message: '{Message}'", message);
 
-            await _publisher.PublishMessageAsync(new TheMessage(DateTime.Now, 1));
+            await _publisher.PublishMessageAsync(message);
 
             int waitSecs = rnd.Next(30, 60);
             await Task.Delay(waitSecs * 1000, stoppingToken);

@@ -6,8 +6,8 @@ services:
       - "5672:5672"               # AMQP (apps)
       - "15672:15672"             # Management UI (browser)
     environment:
-      RABBITMQ_DEFAULT_USER: backtest
-      RABBITMQ_DEFAULT_PASS: backtest
+      RABBITMQ_DEFAULT_USER: trifork
+      RABBITMQ_DEFAULT_PASS: trifork
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     healthcheck:
@@ -21,9 +21,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: backtest
-      POSTGRES_PASSWORD: backtest
-      POSTGRES_DB: backtesting
+      POSTGRES_USER: trifork
+      POSTGRES_PASSWORD: trifork
+      POSTGRES_DB: themessage
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro

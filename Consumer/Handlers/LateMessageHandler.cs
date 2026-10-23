@@ -1,4 +1,3 @@
-using Shared;
 using Shared.Model;
 
 namespace Consumer.Handlers;
