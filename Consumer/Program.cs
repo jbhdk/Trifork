@@ -1,4 +1,5 @@
 using Consumer;
+using Consumer.Handlers;
 using RabbitMQ.Client;
 using Shared.MessageQueue;
 using Shared.Repository;
@@ -10,6 +11,7 @@ public class Program
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         builder.Services.AddHostedService<Worker>();
 
+        // configure rabbit mq queue
         ConnectionFactory connectionFactory = new()
         {
             UserName = "trifork",
@@ -25,11 +27,20 @@ public class Program
         builder.Services.AddSingleton(connection);
         builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
 
+        // init postgres
         IDbConnectionFactory factory = new SqlConnectionFactory(builder.Configuration.GetConnectionString("Postgres")!);
         builder.Services.AddSingleton(factory);
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 
-        var host = builder.Build();
+        // init handler
+        builder.Services.AddSingleton<IMessagHandler, LateMessageHandler>();
+        builder.Services.AddSingleton<IMessagHandler, EvenSecMessageHandler>();
+        builder.Services.AddSingleton<IMessagHandler, OddSecMessageHandler>();
+
+        // time provider
+        builder.Services.AddSingleton(TimeProvider.System);
+
+        IHost host = builder.Build();
         host.Run();
     }
 }
