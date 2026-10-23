@@ -4,5 +4,5 @@ namespace Shared.Repository;
 
 public interface IMessageRepository
 {
-    public void Insert(Message message);
+    public Task InsertAsync(Message message);
 }

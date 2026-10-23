@@ -77,3 +77,4 @@ buildnumber.txt
 
 compose.yaml
 Dockerfile
+.dockerignore

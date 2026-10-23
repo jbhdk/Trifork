@@ -29,19 +29,19 @@ public class Program
         // init postgres
         string dbConnectionString = builder.Configuration.GetConnectionString("Postgres")
             ?? throw new InvalidOperationException("Connection string 'Postgres' not found in configuration.");
-        IDbConnectionFactory factory = new SqlConnectionFactory(dbConnectionString);
+        IDbConnectionFactory factory = new NpqsqlConnectionFactory(dbConnectionString);
         builder.Services.AddSingleton(factory);
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 
         // init handler
-        builder.Services.AddSingleton<IMessagHandler, LateMessageHandler>();
-        builder.Services.AddSingleton<IMessagHandler, EvenSecMessageHandler>();
-        builder.Services.AddSingleton<IMessagHandler, OddSecMessageHandler>();
+        builder.Services.AddSingleton<IMessageHandler, LateMessageHandler>();
+        builder.Services.AddSingleton<IMessageHandler, EvenSecMessageHandler>();
+        builder.Services.AddSingleton<IMessageHandler, OddSecMessageHandler>();
 
         // time provider
         builder.Services.AddSingleton(TimeProvider.System);
 
         IHost host = builder.Build();
-        host.Run();
+        await host.RunAsync();
     }
 }

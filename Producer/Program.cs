@@ -28,6 +28,6 @@ public class Program
         builder.Services.AddSingleton(TimeProvider.System);
 
         IHost host = builder.Build();
-        host.Run();
+        await host.RunAsync();
     }
 }

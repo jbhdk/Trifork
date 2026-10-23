@@ -18,14 +18,14 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        Random rnd = new(87);
+        Random rnd = new();
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            Message message = new(_timeProvider.GetLocalNow().DateTime, 1);
+            Message message = new(_timeProvider.GetUtcNow().UtcDateTime, 1);
             _logger.LogInformation("Pushing message: '{Message}'", message);
 
-            await _publisher.PublishMessageAsync(message);
+            await _publisher.PublishMessageAsync(message, stoppingToken);
 
             int waitSecs = rnd.Next(30, 90);
             await Task.Delay(waitSecs * 1000, stoppingToken);

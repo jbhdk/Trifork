@@ -11,7 +11,7 @@ public class EvenSecMessageHandlerTests
     [Test]
     public void CanHandleMessage_OddSeconds_ReturnsFalse()
     {
-        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 1);
+        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 1, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
         IMessageRepository repository = A.Fake<IMessageRepository>();
 
@@ -25,7 +25,7 @@ public class EvenSecMessageHandlerTests
     [Test]
     public void CanHandleMessage_EvenSeconds_ReturnsTrue()
     {
-        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
+        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
         IMessageRepository repository = A.Fake<IMessageRepository>();
 
@@ -39,13 +39,13 @@ public class EvenSecMessageHandlerTests
     [Test]
     public async Task HandleMessage_Any_IncrementsAndPublishes()
     {
-        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
+        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
         IMessageRepository repository = A.Fake<IMessageRepository>();
 
         EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
 
         await handler.HandleMessageAsync(message);
-        A.CallTo(() => repository.Insert(message)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => repository.InsertAsync(message)).MustHaveHappenedOnceExactly();
     }
 }

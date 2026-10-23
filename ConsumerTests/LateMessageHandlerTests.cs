@@ -11,7 +11,7 @@ public class LateMessageHandlerTests
     [Test]
     public void CanHandleMessage_OneMinuteLater_ReturnsFalse()
     {
-        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 0);
+        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 0, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
 
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 1, 0));
@@ -25,7 +25,7 @@ public class LateMessageHandlerTests
     [Test]
     public void CanHandleMessage_61SecondsLater_ReturnsTrue()
     {
-        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 0);
+        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 0, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
 
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 1, 1));

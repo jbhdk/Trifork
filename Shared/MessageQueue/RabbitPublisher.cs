@@ -23,7 +23,7 @@ public class RabbitPublisher(IConnection connection) : IAsyncDisposable, IRabbit
         try
         {
             _channel ??= await connection.CreateChannelAsync(cancellationToken: ct);
-            await _channel.BasicPublishAsync("", Configure.MessageQueue, mandatory: true,
+            await _channel.BasicPublishAsync("", Configure.MessageQueue, mandatory: false,
                 basicProperties: props, body: body, cancellationToken: ct);
         }
         finally

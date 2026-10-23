@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Consumer.Handlers;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Shared.MessageQueue;
@@ -10,16 +11,16 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly IConnection _connection;
-    private readonly IEnumerable<IMessagHandler> _chain;
+    private readonly IMessageDispatcher _dispatcher;
 
     public Worker(
         ILogger<Worker> logger,
         IConnection connection,
-        IEnumerable<IMessagHandler> chain)
+        IMessageDispatcher dispatcher)
     {
         _logger = logger;
         _connection = connection;
-        _chain = chain;
+        _dispatcher = dispatcher;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,12 +32,8 @@ public class Worker : BackgroundService
         {
             Message message = JsonSerializer.Deserialize<Message>(y.Body.Span)!;
 
-            IMessagHandler? handler = _chain.FirstOrDefault(handler => handler.CanHandleMessage(message));
-            if (handler != null)
-            {
-                await handler.HandleMessageAsync(message);
-            }
-            else
+            bool dispatched = await _dispatcher.DispatchAsync(message);
+            if (!dispatched)
             {
                 _logger.LogWarning("No handler for message {Message}", message);
             }
