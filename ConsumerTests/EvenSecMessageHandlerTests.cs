@@ -9,7 +9,7 @@ namespace ConsumerTests;
 public class EvenSecMessageHandlerTests
 {
     [Test]
-    public void CanHandleMessage_OddSeconds_ReturnsFalse()
+    public async Task TryHandleAsync_OddSeconds_ReturnsFalseAndDoesNotInsert()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 1, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
@@ -17,13 +17,14 @@ public class EvenSecMessageHandlerTests
 
         EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
 
-        bool canHandle = handler.CanHandleMessage(message);
+        bool handled = await handler.TryHandleAsync(message);
 
-        Assert.That(canHandle, Is.False);
+        Assert.That(handled, Is.False);
+        A.CallTo(() => repository.InsertAsync(A<Message>.Ignored)).MustNotHaveHappened();
     }
 
     [Test]
-    public void CanHandleMessage_EvenSeconds_ReturnsTrue()
+    public async Task TryHandleAsync_EvenSeconds_ReturnsTrueAndInserts()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2, DateTimeKind.Utc);
         Message message = new(messageTimestamp, 1);
@@ -31,21 +32,9 @@ public class EvenSecMessageHandlerTests
 
         EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
 
-        bool canHandle = handler.CanHandleMessage(message);
+        bool handled = await handler.TryHandleAsync(message);
 
-        Assert.That(canHandle, Is.True);
-    }
-
-    [Test]
-    public async Task HandleMessage_Any_IncrementsAndPublishes()
-    {
-        DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2, DateTimeKind.Utc);
-        Message message = new(messageTimestamp, 1);
-        IMessageRepository repository = A.Fake<IMessageRepository>();
-
-        EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
-
-        await handler.HandleMessageAsync(message);
+        Assert.That(handled, Is.True);
         A.CallTo(() => repository.InsertAsync(message)).MustHaveHappenedOnceExactly();
     }
 }

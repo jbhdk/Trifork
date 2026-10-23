@@ -12,17 +12,19 @@ public class OddSecMessageHandler(
     private readonly IRabbitPublisher _publisher = publisher;
     private readonly TimeProvider _timeProvider = timeProvider;
 
-    public bool CanHandleMessage(Message message)
+    public async Task<bool> TryHandleAsync(Message message)
     {
-        return message.Timestamp.Second % 2 != 0;
-    }
+        if (message.Timestamp.Second % 2 == 0)
+        {
+            return false;
+        }
 
-    public async Task HandleMessageAsync(Message message)
-    {
         // return to queue and +1
         Message newMessage = new(_timeProvider.GetUtcNow().UtcDateTime, message.Count + 1);
 
         _logger.LogInformation("Returning message to queue: '{Message}'", newMessage);
         await _publisher.PublishMessageAsync(newMessage);
+        
+        return true;
     }
 }

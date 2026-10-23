@@ -11,14 +11,14 @@ public class MessageDispatcher(
 
     public async Task<bool> DispatchAsync(Message message)
     {
-        IMessageHandler? handler = _chain.FirstOrDefault(handler => handler.CanHandleMessage(message));
-        if (handler != null)
+        foreach (IMessageHandler handler in _chain)
         {
-            return false;
+            if (await handler.TryHandleAsync(message))
+            {
+                return true;
+            }
         }
 
-        await handler!.HandleMessageAsync(message);
-
-        return true;
+        return false;
     }
 }
