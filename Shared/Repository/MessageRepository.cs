@@ -6,15 +6,16 @@ namespace Shared.Repository;
 
 public class MessageRepository(IDbConnectionFactory connectionFactory) : IMessageRepository
 {
-    private const string InsertSql = """
-        INSERT INTO "TheMessage" ("Timestamp", "Count")
-        VALUES (@Timestamp, @Count)
-        """;
+    private const string sql = $@"
+        INSERT INTO 
+            messages (timestamp, count)
+        VALUES
+            (@Timestamp, @Count)";
 
     public void Insert(TheMessage message)
     {
         using IDbConnection connection = connectionFactory.OpenConnection();
 
-        connection.Execute(InsertSql, message);
+        connection.Execute(sql, message);
     }
 }

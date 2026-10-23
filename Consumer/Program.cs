@@ -11,13 +11,12 @@ public class Program
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         builder.Services.AddHostedService<Worker>();
 
-        // configure rabbit mq queue
+        // configure rabbitmq queue
+        string rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMq")
+            ?? throw new InvalidOperationException("Connection string 'RabbitMq' not found in configuration.");
         ConnectionFactory connectionFactory = new()
         {
-            UserName = "trifork",
-            Password = "trifork",
-            HostName = "localhost",
-            Port = 5672
+            Uri = new Uri(rabbitMqConnectionString)
         };
         IConnection connection = await connectionFactory.CreateConnectionAsync();
         await using (IChannel setup = await connection.CreateChannelAsync())
@@ -28,7 +27,9 @@ public class Program
         builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
 
         // init postgres
-        IDbConnectionFactory factory = new SqlConnectionFactory(builder.Configuration.GetConnectionString("Postgres")!);
+        string dbConnectionString = builder.Configuration.GetConnectionString("Postgres")
+            ?? throw new InvalidOperationException("Connection string 'Postgres' not found in configuration.");
+        IDbConnectionFactory factory = new SqlConnectionFactory(dbConnectionString);
         builder.Services.AddSingleton(factory);
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 

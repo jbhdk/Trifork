@@ -9,12 +9,18 @@ public class LateMessageHandler(ILogger<LateMessageHandler> logger, TimeProvider
 
     public bool CanHandleMessage(TheMessage message)
     {
-        return message.Timestamp + new TimeSpan(0, 1, 0) >= _timeProvider.GetLocalNow();
+        DateTime now = _timeProvider.GetLocalNow().DateTime;
+        bool canHandle = message.Timestamp + new TimeSpan(0, 1, 0) < now;
+        if (canHandle)
+        {
+            _logger.LogInformation("Late message descarded: {Message}, Now: {Now}", message, now);
+        }
+
+        return canHandle;
     }
 
     public Task HandleMessageAsync(TheMessage message)
     {
-        _logger.LogDebug("Late message: {Message}", message);
 
         return Task.CompletedTask;
     }

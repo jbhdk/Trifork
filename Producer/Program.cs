@@ -9,12 +9,12 @@ public class Program
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         builder.Services.AddHostedService<Worker>();
 
+        // configure rabbitmq queue
+        string rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMq")
+            ?? throw new InvalidOperationException("Connection string 'RabbitMq' not found in configuration.");
         ConnectionFactory connectionFactory = new()
         {
-            UserName = "trifork",
-            Password = "trifork",
-            HostName = "localhost",
-            Port = 5672
+            Uri = new Uri(rabbitMqConnectionString)
         };
         IConnection connection = await connectionFactory.CreateConnectionAsync();
         await using (IChannel setup = await connection.CreateChannelAsync())

@@ -9,7 +9,7 @@ namespace ConsumerTests;
 public class LateMessageHandlerTests
 {
     [Test]
-    public void CanHandleMessage_OneMinuteLater_ReturnsTrue()
+    public void CanHandleMessage_OneMinuteLater_ReturnsFalse()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 0);
         TheMessage message = new(messageTimestamp, 1);
@@ -19,11 +19,11 @@ public class LateMessageHandlerTests
 
         bool canHandle = handler.CanHandleMessage(message);
 
-        Assert.That(canHandle, Is.True);
+        Assert.That(canHandle, Is.False);
     }
 
     [Test]
-    public void CanHandleMessage_61SecondsLater_ReturnsFalse()
+    public void CanHandleMessage_61SecondsLater_ReturnsTrue()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 0);
         TheMessage message = new(messageTimestamp, 1);
@@ -33,6 +33,6 @@ public class LateMessageHandlerTests
 
         bool canHandle = handler.CanHandleMessage(message);
 
-        Assert.That(canHandle, Is.False);
+        Assert.That(canHandle, Is.True);
     }
 }
