@@ -24,6 +24,9 @@ public class Program
         builder.Services.AddSingleton(connection);
         builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
 
+        // time provider
+        builder.Services.AddSingleton(TimeProvider.System);
+
         IHost host = builder.Build();
         host.Run();
     }

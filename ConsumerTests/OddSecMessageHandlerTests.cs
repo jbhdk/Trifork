@@ -15,7 +15,7 @@ public class OddSecMessageHandlerTests
     public void CanHandleMessage_OddSeconds_ReturnsTrue()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 1);
-        TheMessage message = new(messageTimestamp, 1);
+        Message message = new(messageTimestamp, 1);
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 0, 1));
 
         IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
@@ -30,7 +30,7 @@ public class OddSecMessageHandlerTests
     public void CanHandleMessage_EvenSeconds_ReturnsFalse()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
-        TheMessage message = new(messageTimestamp, 1);
+        Message message = new(messageTimestamp, 1);
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 0, 1));
 
         IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
@@ -45,9 +45,9 @@ public class OddSecMessageHandlerTests
     public async Task HandleMessage_Any_IncrementsAndPublishes()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
-        TheMessage message = new(messageTimestamp, 1);
+        Message message = new(messageTimestamp, 1);
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 0, 1));
-        TheMessage expectedMessage = new(timeProvider.GetLocalNow().DateTime, 2);
+        Message expectedMessage = new(timeProvider.GetLocalNow().DateTime, 2);
 
         IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
         OddSecMessageHandler handler = new(new NullLogger<OddSecMessageHandler>(), publisher, timeProvider);

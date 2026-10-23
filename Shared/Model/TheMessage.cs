@@ -1,6 +1,6 @@
 ﻿namespace Shared.Model;
 
-public sealed record TheMessage(DateTime Timestamp, int Count)
+public sealed record Message(DateTime Timestamp, int Count)
 {
     public override string ToString()
     {

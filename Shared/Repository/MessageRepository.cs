@@ -12,7 +12,7 @@ public class MessageRepository(IDbConnectionFactory connectionFactory) : IMessag
         VALUES
             (@Timestamp, @Count)";
 
-    public void Insert(TheMessage message)
+    public void Insert(Message message)
     {
         using IDbConnection connection = connectionFactory.OpenConnection();
 

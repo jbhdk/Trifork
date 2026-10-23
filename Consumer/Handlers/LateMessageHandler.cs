@@ -7,7 +7,7 @@ public class LateMessageHandler(ILogger<LateMessageHandler> logger, TimeProvider
     private readonly ILogger<LateMessageHandler> _logger = logger;
     private readonly TimeProvider _timeProvider = timeProvider;
 
-    public bool CanHandleMessage(TheMessage message)
+    public bool CanHandleMessage(Message message)
     {
         DateTime now = _timeProvider.GetLocalNow().DateTime;
         bool canHandle = message.Timestamp + new TimeSpan(0, 1, 0) < now;
@@ -19,9 +19,8 @@ public class LateMessageHandler(ILogger<LateMessageHandler> logger, TimeProvider
         return canHandle;
     }
 
-    public Task HandleMessageAsync(TheMessage message)
+    public Task HandleMessageAsync(Message message)
     {
-
         return Task.CompletedTask;
     }
 }

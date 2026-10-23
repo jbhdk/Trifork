@@ -12,7 +12,7 @@ public class EvenSecMessageHandlerTests
     public void CanHandleMessage_OddSeconds_ReturnsFalse()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 1);
-        TheMessage message = new(messageTimestamp, 1);
+        Message message = new(messageTimestamp, 1);
         IMessageRepository repository = A.Fake<IMessageRepository>();
 
         EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
@@ -26,7 +26,7 @@ public class EvenSecMessageHandlerTests
     public void CanHandleMessage_EvenSeconds_ReturnsTrue()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
-        TheMessage message = new(messageTimestamp, 1);
+        Message message = new(messageTimestamp, 1);
         IMessageRepository repository = A.Fake<IMessageRepository>();
 
         EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);
@@ -40,7 +40,7 @@ public class EvenSecMessageHandlerTests
     public async Task HandleMessage_Any_IncrementsAndPublishes()
     {
         DateTime messageTimestamp = new(2026, 10, 27, 9, 0, 2);
-        TheMessage message = new(messageTimestamp, 1);
+        Message message = new(messageTimestamp, 1);
         IMessageRepository repository = A.Fake<IMessageRepository>();
 
         EvenSecMessageHandler handler = new(new NullLogger<EvenSecMessageHandler>(), repository);

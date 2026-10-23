@@ -29,7 +29,7 @@ public class Worker : BackgroundService
 
         consumer.ReceivedAsync += async (x, y) =>
         {
-            TheMessage message = JsonSerializer.Deserialize<TheMessage>(y.Body.Span)!;
+            Message message = JsonSerializer.Deserialize<Message>(y.Body.Span)!;
 
             IMessagHandler? handler = _chain.FirstOrDefault(handler => handler.CanHandleMessage(message));
             if (handler != null)
@@ -42,6 +42,6 @@ public class Worker : BackgroundService
             }
         };
 
-        await channel.BasicConsumeAsync(Configure.MessageQueue,  true, consumer, stoppingToken);
+        await channel.BasicConsumeAsync(Configure.MessageQueue, true, consumer, stoppingToken);
     }
 }

@@ -9,7 +9,7 @@ public class RabbitPublisher(IConnection connection) : IAsyncDisposable, IRabbit
     private readonly SemaphoreSlim _lock = new(1, 1);
     private IChannel? _channel;
 
-    public async Task PublishMessageAsync(TheMessage message, CancellationToken ct = default)
+    public async Task PublishMessageAsync(Message message, CancellationToken ct = default)
     {
         BasicProperties props = new()
         {

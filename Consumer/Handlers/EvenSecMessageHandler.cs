@@ -8,12 +8,12 @@ public class EvenSecMessageHandler(ILogger<EvenSecMessageHandler> logger, IMessa
     private readonly ILogger<EvenSecMessageHandler> _logger = logger;
     private readonly IMessageRepository _repository = repository;
 
-    public bool CanHandleMessage(TheMessage message)
+    public bool CanHandleMessage(Message message)
     {
         return message.Timestamp.Second % 2 == 0;
     }
 
-    public Task HandleMessageAsync(TheMessage message)
+    public Task HandleMessageAsync(Message message)
     {
         // save in db
         _logger.LogInformation("Inserting message in db '{Message}'", message);
