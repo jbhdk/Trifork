@@ -33,13 +33,16 @@ public class Program
         builder.Services.AddSingleton(factory);
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 
-        // init handler
-        builder.Services.AddSingleton<IMessageHandler, LateMessageHandler>();
-        builder.Services.AddSingleton<IMessageHandler, EvenSecMessageHandler>();
-        builder.Services.AddSingleton<IMessageHandler, OddSecMessageHandler>();
-
         // time provider
         builder.Services.AddSingleton(TimeProvider.System);
+
+        // init handler
+        builder.Services.AddTransient<LateMessageHandler>();
+        builder.Services.AddTransient<EvenSecMessageHandler>();
+        builder.Services.AddTransient<OddSecMessageHandler>();
+
+        // dispatcher
+        builder.Services.AddTransient<IMessageDispatcher, MessageDispatcher>();
 
         IHost host = builder.Build();
         await host.RunAsync();
