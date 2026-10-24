@@ -14,7 +14,7 @@ public class MessageRepository(IDbConnectionFactory connectionFactory) : IMessag
             VALUES
                 (@Timestamp, @Count)";
 
-        using IDbConnection connection = connectionFactory.OpenConnection();
+        using IDbConnection connection = await connectionFactory.OpenConnectionAsync();
 
         await connection.ExecuteAsync(sql, message);
     }

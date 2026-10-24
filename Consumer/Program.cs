@@ -18,19 +18,16 @@ public class Program
         {
             Uri = new Uri(rabbitMqConnectionString)
         };
-        IConnection connection = await connectionFactory.CreateConnectionAsync();
-        await using (IChannel setup = await connection.CreateChannelAsync())
-        {
-            await Configure.DeclareAsync(setup);
-        }
+        using IConnection connection = await connectionFactory.CreateConnectionAsync();
+        using IChannel setup = await connection.CreateChannelAsync();
+        await Configure.DeclareAsync(setup);
         builder.Services.AddSingleton(connection);
         builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
 
         // init postgres
         string dbConnectionString = builder.Configuration.GetConnectionString("Postgres")
             ?? throw new InvalidOperationException("Connection string 'Postgres' not found in configuration.");
-        IDbConnectionFactory factory = new NpqsqlConnectionFactory(dbConnectionString);
-        builder.Services.AddSingleton(factory);
+        builder.Services.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(dbConnectionString));
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 
         // time provider

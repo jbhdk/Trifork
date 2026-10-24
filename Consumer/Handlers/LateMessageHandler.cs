@@ -15,8 +15,8 @@ public class LateMessageHandler(ILogger<LateMessageHandler> logger, TimeProvider
             return Task.FromResult(false);
         }
 
-        _logger.LogInformation("Late message descarded: {Message}, Now: {Now}", message, now);
-        
+        _logger.LogInformation("Late message discarded: {Message}, Now: {Now}", message, now);
+
         return Task.FromResult(true);
     }
 }

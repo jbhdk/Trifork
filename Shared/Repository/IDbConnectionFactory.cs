@@ -4,5 +4,5 @@ namespace Shared.Repository;
 
 public interface IDbConnectionFactory
 {
-    IDbConnection OpenConnection();
+    Task<IDbConnection> OpenConnectionAsync();
 }
