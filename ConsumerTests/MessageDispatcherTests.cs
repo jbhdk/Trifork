@@ -18,7 +18,7 @@ public class MessageDispatcherTests
 
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 1, 0));
         IMessageRepository repository = A.Fake<IMessageRepository>();
-        IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
+        IMessagePublisher publisher = A.Fake<IMessagePublisher>();
 
         LateMessageHandler lateMessageHandler = new(new NullLogger<LateMessageHandler>(), timeProvider);
         EvenSecMessageHandler evenSecMessageHandler = new(new NullLogger<EvenSecMessageHandler>(), repository);
@@ -39,7 +39,7 @@ public class MessageDispatcherTests
 
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 1, 1));
         IMessageRepository repository = A.Fake<IMessageRepository>();
-        IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
+        IMessagePublisher publisher = A.Fake<IMessagePublisher>();
 
         LateMessageHandler lateMessageHandler = new(new NullLogger<LateMessageHandler>(), timeProvider);
         EvenSecMessageHandler evenSecMessageHandler = new(new NullLogger<EvenSecMessageHandler>(), repository);
@@ -60,7 +60,7 @@ public class MessageDispatcherTests
 
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 1, 1));
         IMessageRepository repository = A.Fake<IMessageRepository>();
-        IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
+        IMessagePublisher publisher = A.Fake<IMessagePublisher>();
 
         LateMessageHandler lateMessageHandler = new(new NullLogger<LateMessageHandler>(), timeProvider);
         EvenSecMessageHandler evenSecMessageHandler = new(new NullLogger<EvenSecMessageHandler>(), repository);

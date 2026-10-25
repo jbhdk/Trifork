@@ -20,7 +20,7 @@ public class Program
         using IChannel setup = await connection.CreateChannelAsync();
         await Configure.DeclareAsync(setup);
         builder.Services.AddSingleton(connection);
-        builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
+        builder.Services.AddSingleton<IMessagePublisher, RabbitPublisher>();
 
         // time provider
         builder.Services.AddSingleton(TimeProvider.System);

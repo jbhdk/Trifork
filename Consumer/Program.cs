@@ -22,7 +22,7 @@ public class Program
         using IChannel setup = await connection.CreateChannelAsync();
         await Configure.DeclareAsync(setup);
         builder.Services.AddSingleton(connection);
-        builder.Services.AddSingleton<IRabbitPublisher, RabbitPublisher>();
+        builder.Services.AddSingleton<IMessagePublisher, RabbitPublisher>();
 
         // init postgres
         string dbConnectionString = builder.Configuration.GetConnectionString("Postgres")

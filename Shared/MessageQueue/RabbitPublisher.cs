@@ -4,7 +4,7 @@ using Shared.Model;
 
 namespace Shared.MessageQueue;
 
-public class RabbitPublisher(IConnection connection) : IAsyncDisposable, IRabbitPublisher
+public class RabbitPublisher(IConnection connection) : IAsyncDisposable, IMessagePublisher
 {
     private readonly SemaphoreSlim _lock = new(1, 1);
     private IChannel? _channel;

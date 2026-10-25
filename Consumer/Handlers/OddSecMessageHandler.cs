@@ -5,11 +5,11 @@ namespace Consumer.Handlers;
 
 public class OddSecMessageHandler(
     ILogger<OddSecMessageHandler> logger,
-    IRabbitPublisher publisher,
+    IMessagePublisher publisher,
     TimeProvider timeProvider) : IMessageHandler
 {
     private readonly ILogger<OddSecMessageHandler> _logger = logger;
-    private readonly IRabbitPublisher _publisher = publisher;
+    private readonly IMessagePublisher _publisher = publisher;
     private readonly TimeProvider _timeProvider = timeProvider;
 
     public async Task<bool> TryHandleAsync(Message message)
@@ -24,7 +24,7 @@ public class OddSecMessageHandler(
 
         _logger.LogInformation("Returning message to queue: '{Message}'", newMessage);
         await _publisher.PublishMessageAsync(newMessage);
-        
+
         return true;
     }
 }

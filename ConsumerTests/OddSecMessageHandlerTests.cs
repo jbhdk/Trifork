@@ -17,7 +17,7 @@ public class OddSecMessageHandlerTests
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 0, 1));
         Message expectedMessage = new(timeProvider.GetUtcNow().UtcDateTime, 2);
 
-        IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
+        IMessagePublisher publisher = A.Fake<IMessagePublisher>();
         OddSecMessageHandler handler = new(new NullLogger<OddSecMessageHandler>(), publisher, timeProvider);
 
         bool handled = await handler.TryHandleAsync(message);
@@ -33,7 +33,7 @@ public class OddSecMessageHandlerTests
         Message message = new(messageTimestamp, 1);
         FakeTimeProvider timeProvider = new(messageTimestamp + new TimeSpan(0, 0, 1));
 
-        IRabbitPublisher publisher = A.Fake<IRabbitPublisher>();
+        IMessagePublisher publisher = A.Fake<IMessagePublisher>();
         OddSecMessageHandler handler = new(new NullLogger<OddSecMessageHandler>(), publisher, timeProvider);
 
         bool handled = await handler.TryHandleAsync(message);
