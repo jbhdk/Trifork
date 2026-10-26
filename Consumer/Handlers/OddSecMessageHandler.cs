@@ -19,7 +19,6 @@ public class OddSecMessageHandler(
             return false;
         }
 
-        // return to queue and +1
         Message newMessage = new(_timeProvider.GetUtcNow().UtcDateTime, message.Count + 1);
 
         _logger.LogInformation("Returning message to queue: '{Message}'", newMessage);
